@@ -16,7 +16,7 @@ Search Orders
 
 .. code-block:: php
     
-    $lastUpdatedAfter = (new DateTime('01-01-2023'))->format(\Onetoweb\AmazonOrder\Client::AMAZON_QUERY_DATE_FORMAT);
+    $lastUpdatedAfter = (new DateTime('2023-01-01'))->format(\Onetoweb\AmazonOrder\Client::AMAZON_QUERY_DATE_FORMAT);
     $results = $client->searchOrders([
         'LastUpdatedAfter' => $lastUpdatedAfter,
         'MarketplaceIds' => 'A1805IZSGTT6HS'
