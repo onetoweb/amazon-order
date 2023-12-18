@@ -4,7 +4,7 @@ namespace Onetoweb\AmazonOrder;
 
 use GuzzleHttp\RequestOptions;
 use GuzzleHttp\Client as GuzzleCLient;
-use Onetoweb\AmazonOrder\Exception\UnknownRegionException;
+use Onetoweb\AmazonOrder\Exception\{UnknownRegionException, TokenException};
 use Onetoweb\AmazonOrder\Token;
 use DateTime;
 
@@ -231,6 +231,8 @@ class Client
     }
     
     /**
+     * @throws TokenException if fetching access token fails
+     * 
      * @return void
      */
     public function getAccessToken(): void
@@ -257,6 +259,11 @@ class Client
         
         // get token array
         $tokenArray = json_decode($contents, true);
+        
+        // throw token exception
+        if (isset($tokenArray['error'])) {
+            throw new TokenException($tokenArray['error_description'] ?? 'failed to get access token');
+        }
         
         // get expires datetime
         $expiresIn = ((int) $tokenArray['expires_in'] - 10);
