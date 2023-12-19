@@ -1,23 +1,22 @@
 .. _top:
-.. title:: Catalog
+.. title:: Definition
 
 `Back to index <index.rst>`_
 
-=======
-Catalog
-=======
+==========
+Definition
+==========
 
 .. contents::
     :local:
 
 
-Search Items
-````````````
+Get Product Types
+`````````````````
 
 .. code-block:: php
     
-    $results = $client->catalog->searchItems([
-        'keywords' => 'keyword',
+    $results = $client->definition->getProductTypes([
         'marketplaceIds' => 'A1805IZSGTT6HS'
     ]);
 

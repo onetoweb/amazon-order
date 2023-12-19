@@ -5,6 +5,7 @@ namespace Onetoweb\AmazonOrder;
 use GuzzleHttp\RequestOptions;
 use GuzzleHttp\Client as GuzzleCLient;
 use Onetoweb\AmazonOrder\Exception\{UnknownRegionException, TokenException};
+use Onetoweb\AmazonOrder\Endpoint\Endpoints;
 use Onetoweb\AmazonOrder\Token;
 use DateTime;
 
@@ -18,6 +19,9 @@ class Client
      */
     public const METHOD_GET = 'GET';
     public const METHOD_POST = 'POST';
+    public const METHOD_PUT = 'PUT';
+    public const METHOD_PATCH = 'PATCH';
+    public const METHOD_DELETE = 'DELETE';
     
     /**
      * Date formats.
@@ -81,6 +85,19 @@ class Client
         $this->clientSecret = $clientSecret;
         $this->refreshToken = $refreshToken;
         $this->setRegion($region);
+        
+        // load endpoints
+        $this->loadEndpoints();
+    }
+    
+    /**
+     * @return void
+     */
+    private function loadEndpoints(): void
+    {
+        foreach (Endpoints::list() as $name => $class) {
+            $this->{$name} = new $class($this);
+        }
     }
     
     /**
@@ -129,92 +146,12 @@ class Client
     }
     
     /**
-     * @param array $query = []
-     * 
-     * @return array
-     */
-    public function searchCatalogItems(array $query = []): array
-    {
-        return $this->get('/catalog/2022-04-01/items', $query);
-    }
-    
-    /**
-     * @param array $query = []
-     * 
-     * @return array
-     */
-    public function searchOrders(array $query = []): array
-    {
-        return $this->get('/orders/v0/orders', $query);
-    }
-    
-    /**
-     * @param string $orderId
-     *
-     * @return array
-     */
-    public function getOrder(string $orderId): array
-    {
-        return $this->get("/orders/v0/orders/$orderId");
-    }
-    
-    /**
-     * @param string $orderId
-     * 
-     * @return array
-     */
-    public function getOrderBuyerInfo(string $orderId): array
-    {
-        return $this->get("/orders/v0/orders/$orderId/buyerInfo");
-    }
-    
-    /**
-     * @param string $orderId
-     * 
-     * @return array
-     */
-    public function getOrderAddress(string $orderId): array
-    {
-        return $this->get("/orders/v0/orders/$orderId/address");
-    }
-    
-    /**
-     * @param string $orderId
-     * 
-     * @return array
-     */
-    public function getOrderItems(string $orderId): array
-    {
-        return $this->get("/orders/v0/orders/$orderId/orderItems");
-    }
-    
-    /**
-     * @param string $orderId
-     * 
-     * @return array
-     */
-    public function getOrderItemsBuyerInfo(string $orderId): array
-    {
-        return $this->get("/orders/v0/orders/$orderId/orderItems/buyerInfo");
-    }
-    
-    /**
-     * @param string $orderId
-     * 
-     * @return array
-     */
-    public function getOrderRegulatedInfo(string $orderId): array
-    {
-        return $this->get("/orders/v0/orders/$orderId/regulatedInfo");
-    }
-    
-    /**
      * @param string $endpoint
      * @param array $query = []
      * 
-     * @return array
+     * @return array|null
      */
-    public function get(string $endpoint, array $query = []): array
+    public function get(string $endpoint, array $query = []): ?array
     {
         return $this->request(self::METHOD_GET, $endpoint, $query);
     }
@@ -222,12 +159,45 @@ class Client
     /**
      * @param string $endpoint
      * @param array $data = []
-     *
-     * @return array
+     * 
+     * @return array|null
      */
-    public function post(string $endpoint, array $data = []): array
+    public function post(string $endpoint, array $data = []): ?array
     {
         return $this->request(self::METHOD_POST, $endpoint, [], $data);
+    }
+    
+    /**
+     * @param string $endpoint
+     * @param array $data = []
+     * 
+     * @return array|null
+     */
+    public function put(string $endpoint, array $data = [], array $query = []): ?array
+    {
+        return $this->request(self::METHOD_PUT, $endpoint, $query, $data);
+    }
+    
+    /**
+     * @param string $endpoint
+     * @param array $data = []
+     * 
+     * @return array|null
+     */
+    public function patch(string $endpoint, array $data = [], array $query = []): ?array
+    {
+        return $this->request(self::METHOD_PATCH, $endpoint, $query, $data);
+    }
+    
+    /**
+     * @param string $endpoint
+     * @param array $query = []
+     * 
+     * @return array|null
+     */
+    public function delete(string $endpoint, array $query = []): ?array
+    {
+        return $this->request(self::METHOD_DELETE, $endpoint, $query);
     }
     
     /**
@@ -287,9 +257,9 @@ class Client
      * @param array $query = []
      * @param array $data = []
      * 
-     * @return array
+     * @return array|null
      */
-    public function request(string $method, string $endpoint, array $query = [], array $data = []): array
+    public function request(string $method, string $endpoint, array $query = [], array $data = []): ?array
     {
         if ($this->token === null or $this->token->isExpired()) {
             $this->getAccessToken();
@@ -297,16 +267,21 @@ class Client
         
         // build options
         $options = [
+            RequestOptions::DEBUG => false,
             RequestOptions::HTTP_ERRORS => false,
             RequestOptions::HEADERS => [
-                'user-agent' => 'XELshop (Language=PHP/'.phpversion().'; Platform='.PHP_OS.')',
+                'user-agent' => 'Onetoweb (Language=PHP/'.phpversion().'; Platform='.PHP_OS.')',
+                'content-type' => 'application/json; charset=utf-8',
                 'x-amz-access-token' => (string) $this->token,
                 'x-amz-date' => (new DateTime())->format(self::X_AMZ_DATE_HEADER_FORMAT),
-                
             ],
             RequestOptions::QUERY => $query,
-            RequestOptions::FORM_PARAMS => $data
         ];
+        
+        // add json body
+        if (in_array($method, [self::METHOD_POST, self::METHOD_PUT, self::METHOD_PATCH])) {
+            $options[RequestOptions::JSON] = $data;
+        }
         
         // request
         $response = (new GuzzleCLient())->request($method, $this->baseUrl . $endpoint, $options);
@@ -314,7 +289,7 @@ class Client
         // get contents
         $contents = $response->getBody()->getContents();
         
-        // decode
+        // json decode
         $data = json_decode($contents, true);
         
         // return data

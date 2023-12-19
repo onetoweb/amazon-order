@@ -58,6 +58,6 @@ class Token
      */
     public function __toString()
     {
-        return $this->getValue();
+        return $this->value;
     }
 }

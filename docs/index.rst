@@ -5,7 +5,7 @@ Basic Usage
 ===========
 
 Setup
-        
+
 .. code-block:: php
     
     require 'vendor/autoload.php';
@@ -53,4 +53,6 @@ Examples
 ========
 
 * `Catalog <catalog.rst>`_
+* `Definition <definition.rst>`_
+* `Listing <listing.rst>`_
 * `Order <order.rst>`_

@@ -17,7 +17,7 @@ Search Orders
 .. code-block:: php
     
     $lastUpdatedAfter = (new DateTime('2023-01-01'))->format(\Onetoweb\AmazonOrder\Client::AMAZON_QUERY_DATE_FORMAT);
-    $results = $client->searchOrders([
+    $results = $client->order->search([
         'LastUpdatedAfter' => $lastUpdatedAfter,
         'MarketplaceIds' => 'A1805IZSGTT6HS'
     ]);
@@ -29,7 +29,7 @@ Get Order
 .. code-block:: php
     
     $orderId = '000-0000000-0000000';
-    $results = $client->getOrder($orderId);
+    $results = $client->order->get($orderId);
 
 
 Get Order Buyer Info
@@ -38,7 +38,7 @@ Get Order Buyer Info
 .. code-block:: php
     
     $orderId = '000-0000000-0000000';
-    $results = $client->getOrderBuyerInfo($orderId);
+    $results = $client->order->getBuyerInfo($orderId);
 
 
 Get Order Address
@@ -47,7 +47,7 @@ Get Order Address
 .. code-block:: php
     
     $orderId = '000-0000000-0000000';
-    $results = $client->getOrderAddress($orderId);
+    $results = $client->order->getAddress($orderId);
 
 
 Get Order Items
@@ -56,7 +56,7 @@ Get Order Items
 .. code-block:: php
     
     $orderId = '000-0000000-0000000';
-    $results = $client->getOrderItems($orderId);
+    $results = $client->order->getItems($orderId);
 
 
 Get Order Items Buyer Info
@@ -65,7 +65,7 @@ Get Order Items Buyer Info
 .. code-block:: php
     
     $orderId = '000-0000000-0000000';
-    $results = $client->getOrderItemsBuyerInfo($orderId);
+    $results = $client->order->getItemBuyerInfo($orderId);
 
 
 Get Order Regulated Info
@@ -74,7 +74,7 @@ Get Order Regulated Info
 .. code-block:: php
     
     $orderId = '000-0000000-0000000';
-    $results = $client->getOrderRegulatedInfo($orderId);
+    $results = $client->order->getRegulatedInfo($orderId);
 
 
 `Back to top <#top>`_
