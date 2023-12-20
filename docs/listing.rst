@@ -22,7 +22,6 @@ Get Listing Item
         'marketplaceIds' => 'A1805IZSGTT6HS'
     ]);
 
-
 Patch Listing Item (update fulfillment availability quantity)
 `````````````````````````````````````````````````````````````
 
@@ -44,6 +43,18 @@ Patch Listing Item (update fulfillment availability quantity)
                 'marketplace_id' => 'A1805IZSGTT6HS'
             ]]
         ]]
+    ]);
+
+
+Delete Listing Item
+```````````````````
+
+.. code-block:: php
+    
+    $sellerId = '{seller_id}';
+    $sku = '{sku}';
+    $result = $client->listing->deleteItem($sellerId, $sku, [
+        'marketplaceIds' => 'A1805IZSGTT6HS'
     ]);
 
 
