@@ -4,7 +4,6 @@
 
  - Initial release
 
-## [2.0.0] - 2023-12-19
+## [2.0.0] - 2023-12-20
 
  - Added endpoints
- - 
