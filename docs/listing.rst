@@ -19,8 +19,10 @@ Get Listing Item
     $sellerId = '{seller_id}';
     $sku = '{sku}';
     $result = $client->listing->getItem($sellerId, $sku, [
-        'marketplaceIds' => 'A1805IZSGTT6HS'
+        'marketplaceIds' => 'A1805IZSGTT6HS',
+        'includedData' => 'summaries, attributes, issues, offers, fulfillmentAvailability, procurement'
     ]);
+
 
 Patch Listing Item (update fulfillment availability quantity)
 `````````````````````````````````````````````````````````````
