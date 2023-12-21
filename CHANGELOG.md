@@ -11,3 +11,7 @@
 ## [2.0.1] - 2023-12-20
 
  - Added delete item to listing endpoint
+
+## [2.0.2] - 2023-12-21
+
+ - Added getProductType to definition endpoint
