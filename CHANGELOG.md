@@ -15,3 +15,7 @@
 ## [2.0.2] - 2023-12-21
 
  - Added getProductType to definition endpoint
+
+## [2.0.3] - 2023-12-21
+
+ - Added getItem to catalog endpoint

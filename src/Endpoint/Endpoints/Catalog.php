@@ -18,4 +18,15 @@ class Catalog extends AbstractEndpoint
     {
         return $this->client->get('/catalog/2022-04-01/items', $query);
     }
+    
+    /**
+     * @param string $asin
+     * @param array $query = []
+     * 
+     * @return array|null
+     */
+    public function getItem(string $asin, array $query = []): ?array
+    {
+        return $this->client->get("/catalog/2022-04-01/items/$asin", $query);
+    }
 }

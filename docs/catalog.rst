@@ -22,4 +22,16 @@ Search Items
     ]);
 
 
+Get Item
+````````
+
+.. code-block:: php
+    
+    $asin = '{asin}';
+    $results = $client->catalog->getItem($asin, [
+        'marketplaceIds' => 'A1805IZSGTT6HS',
+        'includedData' => 'attributes, dimensions, identifiers, images, productTypes, relationships, salesRanks, summaries'
+    ]);
+
+
 `Back to top <#top>`_
