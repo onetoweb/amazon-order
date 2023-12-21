@@ -74,6 +74,11 @@ class Client
     private $token;
     
     /**
+     * @var float
+     */
+    private $rateLimit;
+    
+    /**
      * @param string $clientId
      * @param string $clientSecret
      * @param string $refreshToken
@@ -143,6 +148,14 @@ class Client
     public function getToken(): Token
     {
         return $this->token;
+    }
+    
+    /**
+     * @return float|null
+     */
+    public function getRateLimit(): ?float
+    {
+        return $this->rateLimit;
     }
     
     /**
@@ -285,6 +298,9 @@ class Client
         
         // request
         $response = (new GuzzleCLient())->request($method, $this->baseUrl . $endpoint, $options);
+        
+        // set rate limit
+        $this->rateLimit = (float) $response->getHeaderLine('x-amzn-RateLimit-Limit');
         
         // get contents
         $contents = $response->getBody()->getContents();

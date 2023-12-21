@@ -19,3 +19,4 @@
 ## [2.0.3] - 2023-12-21
 
  - Added getItem to catalog endpoint
+ - Added getRateLimit method to Client
