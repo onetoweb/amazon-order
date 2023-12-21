@@ -18,4 +18,15 @@ class Definition extends AbstractEndpoint
     {
         return $this->client->get('/definitions/2020-09-01/productTypes', $query);
     }
+    
+    /**
+     * @param string $productType
+     * @param array $query = []
+     * 
+     * @return array|null
+     */
+    public function getProductType(string $productType, array $query = []): ?array
+    {
+        return $this->client->get("/definitions/2020-09-01/productTypes/$productType", $query);
+    }
 }

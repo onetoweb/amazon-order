@@ -21,4 +21,14 @@ Get Product Types
     ]);
 
 
+Get Product Type
+````````````````
+
+.. code-block:: php
+    
+    $results = $client->definition->getProductType('CAR_PARTS_AND_ACCESSORIES', [
+        'marketplaceIds' => 'A1805IZSGTT6HS',
+    ]);
+
+
 `Back to top <#top>`_
