@@ -20,3 +20,7 @@
 
  - Added getItem to catalog endpoint
  - Added getRateLimit method to Client
+
+## [2.0.4] - 2024-02-29
+
+ - Added createShipmentConfirmation to order endpoint
