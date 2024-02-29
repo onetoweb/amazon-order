@@ -77,4 +77,31 @@ Get Order Regulated Info
     $results = $client->order->getRegulatedInfo($orderId);
 
 
+Create Shipment Confirmation
+````````````````````````````
+
+.. code-block:: php
+    
+    $orderId = '000-0000000-0000000';
+    $client->order->createShipmentConfirmation($orderId, [
+        'marketplaceId' => 'A1805IZSGTT6HS',
+        'codCollectionMethod' => '',
+        'packageDetail' => [
+            'packageReferenceId' => '123',
+            'carrierCode' => 'UPS',
+            'carrierName' => 'UPS',
+            'shippingMethod' => 'SHIPPING',
+            'trackingNumber' => '1Z86V8030385598957',
+            'shipDate' => '2022-11-30T16:15:30Z',
+            'shipFromSupplySourceId' => '057d3fcc-b750-419f-bbcd-4d340c60c430',
+            'orderItems' => [
+                [
+                    'orderItemId' => '60696125413094',
+                    'quantity' => 1
+                ]
+            ]
+        ]
+    ]);
+
+
 `Back to top <#top>`_

@@ -78,4 +78,15 @@ class Order extends AbstractEndpoint
     {
         return $this->client->get("/orders/v0/orders/$orderId/regulatedInfo");
     }
+    
+    /**
+     * @param string $orderId
+     * @param array $data = []
+     * 
+     * @return array|null
+     */
+    public function createShipmentConfirmation(string $orderId, array $data = []): ?array
+    {
+        return $this->client->post("/orders/v0/orders/$orderId/shipmentConfirmation", $data);
+    }
 }
