@@ -56,3 +56,4 @@ Examples
 * `Definition <definition.rst>`_
 * `Listing <listing.rst>`_
 * `Order <order.rst>`_
+* `Product Fee <product_fee.rst>`_
