@@ -24,3 +24,7 @@
 ## [2.0.4] - 2024-02-29
 
  - Added createShipmentConfirmation to order endpoint
+
+## [2.0.5] - 2024-03-04
+
+ - Added productFee endpoint
