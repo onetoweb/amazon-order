@@ -25,6 +25,10 @@
 
  - Added createShipmentConfirmation to order endpoint
 
-## [2.0.5] - 2024-03-04
+## [2.0.5] - 2024-04-03
 
  - Added productFee endpoint
+
+## [2.1.0] - 2024-04-04
+
+ - Added option to access restricted data elements with a restricted data token

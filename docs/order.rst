@@ -32,6 +32,21 @@ Get Order
     $results = $client->order->get($orderId);
 
 
+Get Order with restricted data elements
+```````````````````````````````````````
+
+.. code-block:: php
+    
+    $orderId = '000-0000000-0000000';
+    
+    // add the restricted data elements you want to read
+    $restrictedDataElements = [
+        'shippingAddress'
+    ];
+    
+    $results = $client->order->get($orderId, $restrictedDataElements);
+
+
 Get Order Buyer Info
 ````````````````````
 
@@ -48,6 +63,21 @@ Get Order Address
     
     $orderId = '000-0000000-0000000';
     $results = $client->order->getAddress($orderId);
+
+
+Get Order Address with restricted data elements
+```````````````````````````````````````````````
+
+.. code-block:: php
+    
+    $orderId = '000-0000000-0000000';
+    
+    // add the restricted data elements you want to read
+    $restrictedDataElements = [
+        'shippingAddress'
+    ];
+    
+    $results = $client->order->getAddress($orderId, $restrictedDataElements);
 
 
 Get Order Items

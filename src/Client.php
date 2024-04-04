@@ -159,58 +159,75 @@ class Client
     }
     
     /**
-     * @param string $endpoint
+     * @param string $path
      * @param array $query = []
+     * @param array $restrictedDataElements = []
      * 
      * @return array|null
      */
-    public function get(string $endpoint, array $query = []): ?array
+    public function get(string $path, array $query = [], array $restrictedDataElements = []): ?array
     {
-        return $this->request(self::METHOD_GET, $endpoint, $query);
+        $restrictedDataToken = $this->getRestrictedDataToken(self::METHOD_GET, $path, $restrictedDataElements);
+        
+        return $this->request(self::METHOD_GET, $path, $query, [], $restrictedDataToken);
     }
     
     /**
-     * @param string $endpoint
+     * @param string $path
      * @param array $data = []
+     * @param array $restrictedDataElements = []
      * 
      * @return array|null
      */
-    public function post(string $endpoint, array $data = []): ?array
+    public function post(string $path, array $data = [], array $restrictedDataElements = []): ?array
     {
-        return $this->request(self::METHOD_POST, $endpoint, [], $data);
+        $restrictedDataToken = $this->getRestrictedDataToken(self::METHOD_POST, $path, $restrictedDataElements);
+        
+        return $this->request(self::METHOD_POST, $path, [], $data, $restrictedDataToken);
     }
     
     /**
-     * @param string $endpoint
+     * @param string $path
      * @param array $data = []
-     * 
-     * @return array|null
-     */
-    public function put(string $endpoint, array $data = [], array $query = []): ?array
-    {
-        return $this->request(self::METHOD_PUT, $endpoint, $query, $data);
-    }
-    
-    /**
-     * @param string $endpoint
-     * @param array $data = []
-     * 
-     * @return array|null
-     */
-    public function patch(string $endpoint, array $data = [], array $query = []): ?array
-    {
-        return $this->request(self::METHOD_PATCH, $endpoint, $query, $data);
-    }
-    
-    /**
-     * @param string $endpoint
      * @param array $query = []
+     * @param array $restrictedDataElements = []
      * 
      * @return array|null
      */
-    public function delete(string $endpoint, array $query = []): ?array
+    public function put(string $path, array $data = [], array $query = [], array $restrictedDataElements = []): ?array
     {
-        return $this->request(self::METHOD_DELETE, $endpoint, $query);
+        $restrictedDataToken = $this->getRestrictedDataToken(self::METHOD_PUT, $path, $restrictedDataElements);
+        
+        return $this->request(self::METHOD_PUT, $path, $query, $data, $restrictedDataToken);
+    }
+    
+    /**
+     * @param string $path
+     * @param array $data = []
+     * @param array $query = []
+     * @param array $restrictedDataElements = []
+     * 
+     * @return array|null
+     */
+    public function patch(string $path, array $data = [], array $query = [], array $restrictedDataElements = []): ?array
+    {
+        $restrictedDataToken = $this->getRestrictedDataToken(self::METHOD_PATCH, $path, $restrictedDataElements);
+        
+        return $this->request(self::METHOD_PATCH, $path, $query, $data, $restrictedDataToken);
+    }
+    
+    /**
+     * @param string $path
+     * @param array $query = []
+     * @param array $restrictedDataElements = []
+     * 
+     * @return array|null
+     */
+    public function delete(string $path, array $query = [], array $restrictedDataElements = []): ?array
+    {
+        $restrictedDataToken = $this->getRestrictedDataToken(self::METHOD_DELETE, $path, $restrictedDataElement);
+        
+        return $this->request(self::METHOD_DELETE, $path, $query, [], $restrictedDataToken);
     }
     
     /**
@@ -266,26 +283,70 @@ class Client
     
     /**
      * @param string $method
-     * @param string $endpoint
+     * @param string $path
+     * @param array $dataElements = []
+     * 
+     * @return Token|null
+     */
+    public function getRestrictedDataToken(string $method, string $path, array $dataElements = [])
+    {
+        if (count($dataElements) > 0) {
+            
+            // restricted data token request
+            $results = $this->post('/tokens/2021-03-01/restrictedDataToken', [
+                'restrictedResources' => [[
+                    'method' => $method,
+                    'path' => $path,
+                    'dataElements' => $dataElements
+                ]]
+            ]);
+            
+            if (
+                isset($results['expiresIn'])
+                and isset($results['restrictedDataToken'])
+            ) {
+                
+                // get expires datetime
+                $expiresIn = ((int) $results['expiresIn'] - 10);
+                $expires = (new DateTime())->modify("+$expiresIn seconds");
+                
+                // return restricted data token
+                return new Token($results['restrictedDataToken'], $expires);
+            }
+        }
+        
+        return null;
+    }
+    
+    /**
+     * @param string $method
+     * @param string $path
      * @param array $query = []
      * @param array $data = []
+     * @param Token $restrictedDataToken = null
      * 
      * @return array|null
      */
-    public function request(string $method, string $endpoint, array $query = [], array $data = []): ?array
+    public function request(string $method, string $path, array $query = [], array $data = [], Token $restrictedDataToken = null): ?array
     {
-        if ($this->token === null or $this->token->isExpired()) {
+        // check token
+        if (
+            $restrictedDataToken === null
+            and (
+                $this->token === null
+                or $this->token->isExpired()
+            )
+        ) {
             $this->getAccessToken();
         }
         
         // build options
         $options = [
-            RequestOptions::DEBUG => false,
             RequestOptions::HTTP_ERRORS => false,
             RequestOptions::HEADERS => [
                 'user-agent' => 'Onetoweb (Language=PHP/'.phpversion().'; Platform='.PHP_OS.')',
                 'content-type' => 'application/json; charset=utf-8',
-                'x-amz-access-token' => (string) $this->token,
+                'x-amz-access-token' => (string) ($restrictedDataToken !== null ? $restrictedDataToken : $this->token),
                 'x-amz-date' => (new DateTime())->format(self::X_AMZ_DATE_HEADER_FORMAT),
             ],
             RequestOptions::QUERY => $query,
@@ -297,7 +358,7 @@ class Client
         }
         
         // request
-        $response = (new GuzzleCLient())->request($method, $this->baseUrl . $endpoint, $options);
+        $response = (new GuzzleCLient())->request($method, $this->baseUrl . $path, $options);
         
         // set rate limit
         $this->rateLimit = (float) $response->getHeaderLine('x-amzn-RateLimit-Limit');
