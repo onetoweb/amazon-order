@@ -4,7 +4,7 @@ namespace Onetoweb\AmazonOrder;
 
 use GuzzleHttp\RequestOptions;
 use GuzzleHttp\Client as GuzzleCLient;
-use Onetoweb\AmazonOrder\Exception\{UnknownRegionException, TokenException};
+use Onetoweb\AmazonOrder\Exception\{UnknownRegionException, TokenException, RestrictedDataException};
 use Onetoweb\AmazonOrder\Endpoint\Endpoints;
 use Onetoweb\AmazonOrder\Token;
 use DateTime;
@@ -286,6 +286,8 @@ class Client
      * @param string $path
      * @param array $dataElements = []
      * 
+     * @throws RestrictedDataException if access to restricted data elements is denied
+     * 
      * @return Token|null
      */
     public function getRestrictedDataToken(string $method, string $path, array $dataElements = [])
@@ -300,6 +302,10 @@ class Client
                     'dataElements' => $dataElements
                 ]]
             ]);
+            
+            if (isset($results['errors'][0]['message'])) {
+                throw new RestrictedDataException($results['errors'][0]['message']);
+            }
             
             if (
                 isset($results['expiresIn'])

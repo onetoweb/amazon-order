@@ -32,3 +32,7 @@
 ## [2.1.0] - 2024-04-04
 
  - Added option to access restricted data elements with a restricted data token
+
+## [2.1.1] - 2024-04-04
+
+ - Throws RestrictedDataException if access to restricted data elements is denied
