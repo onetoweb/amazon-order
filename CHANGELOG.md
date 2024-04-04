@@ -36,3 +36,7 @@
 ## [2.1.1] - 2024-04-04
 
  - Throws RestrictedDataException if access to restricted data elements is denied
+
+## [2.1.2] - 2024-04-04
+
+ - Added finance endpoint
