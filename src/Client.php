@@ -12,6 +12,7 @@ use DateTime;
 /**
  * Amazon Order Api Client.
  */
+#[\AllowDynamicProperties]
 class Client
 {
     /**
