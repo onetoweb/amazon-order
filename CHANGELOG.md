@@ -44,3 +44,7 @@
 ## [2.1.3] - 2024-04-17
 
  - AllowDynamicProperties in Client to prevent php 8.2 deprecation notice
+
+## [2.1.4] - 2024-07-08
+
+ - Added report endpoint
