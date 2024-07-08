@@ -38,7 +38,7 @@ Get Report
 
 .. code-block:: php
     
-    $reportId = '00000000000';
+    $reportId = '{report_id}';
     $results = $client->report->get($reportId);
 
 
@@ -47,7 +47,7 @@ Get Report Document
 
 .. code-block:: php
     
-    $documentId = '{document_id}'
+    $documentId = '{document_id}';
     $results = $client->report->document($documentId);
 
 
