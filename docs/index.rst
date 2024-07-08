@@ -58,3 +58,4 @@ Examples
 * `Order <order.rst>`_
 * `Product Fee <product_fee.rst>`_
 * `Finance <finance.rst>`_
+* `Report <report.rst>`_
