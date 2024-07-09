@@ -226,7 +226,7 @@ class Client
      */
     public function delete(string $path, array $query = [], array $restrictedDataElements = []): ?array
     {
-        $restrictedDataToken = $this->getRestrictedDataToken(self::METHOD_DELETE, $path, $restrictedDataElement);
+        $restrictedDataToken = $this->getRestrictedDataToken(self::METHOD_DELETE, $path, $restrictedDataElements);
         
         return $this->request(self::METHOD_DELETE, $path, $query, [], $restrictedDataToken);
     }
@@ -323,6 +323,51 @@ class Client
         }
         
         return null;
+    }
+    
+    /**
+     * @param string $scope = null
+     * 
+     * @throws TokenException if fetching grantless token fails
+     * 
+     * @return Token
+     */
+    public function getGrantlessToken(string $scope): Token
+    {
+        // build options
+        $options = [
+            RequestOptions::HTTP_ERRORS => false,
+            RequestOptions::HEADERS => [
+                'Content-Type' => 'application/x-www-form-urlencoded;charset=UTF-8',
+            ],
+            RequestOptions::QUERY => [
+                'grant_type' => 'client_credentials',
+                'client_id' => $this->clientId,
+                'client_secret' => $this->clientSecret,
+                'scope' => $scope
+            ]
+        ];
+        
+        // request
+        $response = (new GuzzleCLient())->post(self::AUTH_URL, $options);
+        
+        // get contents
+        $contents = $response->getBody()->getContents();
+        
+        // get token array
+        $tokenArray = json_decode($contents, true);
+        
+        // throw token exception
+        if (isset($tokenArray['error'])) {
+            throw new TokenException($tokenArray['error_description'] ?? 'failed to get access token');
+        }
+        
+        // get expires datetime
+        $expiresIn = ((int) $tokenArray['expires_in'] - 10);
+        $expires = (new DateTime())->modify("+$expiresIn seconds");
+        
+        // return grantless token
+        return new Token($tokenArray['access_token'], $expires);
     }
     
     /**
