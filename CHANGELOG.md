@@ -48,3 +48,10 @@
 ## [2.1.4] - 2024-07-08
 
  - Added report endpoint
+
+## [2.1.5] - 2024-07-09
+
+ - Added Notification endpoint
+ - Added getGrantlessToken method to Client
+ - Bugfix: fix variable typo delete method in Client
+

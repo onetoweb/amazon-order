@@ -59,3 +59,5 @@ Examples
 * `Product Fee <product_fee.rst>`_
 * `Finance <finance.rst>`_
 * `Report <report.rst>`_
+* `Notification <notification.rst>`_
+
