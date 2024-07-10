@@ -55,3 +55,6 @@
  - Added getGrantlessToken method to Client
  - Bugfix: fix variable typo delete method in Client
 
+## [2.1.6] - 2024-07-10
+
+ - Added Seller endpoint
