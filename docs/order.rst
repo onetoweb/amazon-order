@@ -28,7 +28,7 @@ Search Orders by Seller Order Id
 
 .. code-block:: php
     
-    $createdAfter = '2024-09-01T12:00:00Z';
+    $createdAfter = (new DateTime('2023-01-01'))->format(\Onetoweb\AmazonOrder\Client::AMAZON_QUERY_DATE_FORMAT);
     $results = $client->order->search([
         'CreatedAfter' => $createdAfter,
         'MarketplaceIds' => 'A1805IZSGTT6HS',
