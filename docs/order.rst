@@ -23,6 +23,19 @@ Search Orders
     ]);
 
 
+Search Orders by Seller Order Id
+````````````````````````````````
+
+.. code-block:: php
+    
+    $createdAfter = '2024-09-01T12:00:00Z';
+    $results = $client->order->search([
+        'CreatedAfter' => $createdAfter,
+        'MarketplaceIds' => 'A1805IZSGTT6HS',
+        'SellerOrderId' => '9999999',
+    ]);
+
+
 Get Order
 `````````
 
