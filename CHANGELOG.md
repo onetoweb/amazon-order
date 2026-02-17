@@ -58,3 +58,7 @@
 ## [2.1.6] - 2024-07-10
 
  - Added Seller endpoint
+
+## [2.1.7] - 2026-02-17
+
+ - Added Order2026 endpoint

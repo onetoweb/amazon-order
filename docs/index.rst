@@ -56,6 +56,7 @@ Examples
 * `Definition <definition.rst>`_
 * `Listing <listing.rst>`_
 * `Order <order.rst>`_
+* `Order 2026 <order2026.rst>`_
 * `Product Fee <product_fee.rst>`_
 * `Finance <finance.rst>`_
 * `Report <report.rst>`_
